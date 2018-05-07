@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+		<title>title</title>
+		<!--<link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">-->
+		<link rel="stylesheet" type="text/css" href="../css/sm.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/loading.css"/>
+		<style>
+			html {
+				font-size: 15px !important;
+			}
+			.list-block .item-content {
+				padding-left: 0.15 rem;
+			}
+			.label {
+				color: #999999;
+			}
+			.active div:nth-child(2) {
+				background-color: #F74C31;
+				border: 1px solid #f0f0f0;
+				border-radius: 15px;
+				width: 25px;
+				height: 25px;
+				margin-left: -6px !important;
+				text-align: center;
+				line-height: 25px;
+				color: #FFFFFF;
+				font-size: 12px
+			}
+			.active div:nth-child(1) {
+				color: #999999 !important;
+				font-weight: bold;
+			}
+			.weekend div:nth-child(1) {
+				color: #c3c3c3;
+			}
+			.weekend {
+				font-size: 12px;
+				padding-left: 11%
+			}
+			.weekend div:nth-child(2) {
+				margin-left: -2px;
+			}
+			em {
+				font-style: normal;
+			}
+			/*.content {
+			 overflow: hidden !important;
+			 }*/
+			.list-block {
+				margin: 0.05 rem 0 !important;
+			}
+			.error {
+			   color: #F43D30
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+		    <div id="loading" v-show = "isLoading">
+				<div id="loading-center">
+					<div id="loading-center-absolute">
+						<div class="object" id="object_one"></div>
+						<div class="object" id="object_two" style="left:20px;"></div>
+						<div class="object" id="object_three" style="left:40px;"></div>
+						<div class="object" id="object_four" style="left:60px;"></div>
+						<div class="object" id="object_five" style="left:80px;"></div>
+					</div>
+				</div>
+			</div>
+			<div class="content" style="top: 5px">
+				<div class="list-block ">
+					<ul>
+						<li>
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-name"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classNameT}">
+										场所名称
+									</div>
+									<div class="item-input">
+										<input type="text" v-model = "values.className">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-calendar"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.cityT}">
+										所在地
+									</div>
+									<div class="item-input">
+										<input type="text" id='city-picker' v-model = "values.city" placeholder="点击选择城市" readonly="readonly"/>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-email"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classAddressT}">
+										详细地址
+									</div>
+									<div class="item-input">
+										<input type="text" placeholder="请选择地址" v-model = "values.classAddress">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-email"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classCoachT}">
+										地址坐标
+									</div>
+									<div class="item-input">
+										<input type="email" placeholder="点击选择地址" v-on:click = "getLatLng" v-model = "values.classCoach" readonly="readonly">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content" style="display: none">
+								<div class="item-media">
+									<i class="icon icon-form-email"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classUserNameT}">
+										经营者姓名
+									</div>
+									<div class="item-input" >
+										<input type="email" placeholder="请输入时长"  v-model = "values.classUserName">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="item-content" style="display: none">
+								<div class="item-media">
+									<i class="icon icon-form-email"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classUserMobileT}">
+										联系方式
+									</div>
+									<div class="item-input" >
+										<input type="email" placeholder="请输入人数" v-model = "values.classUserMobile">
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="align-top">
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-comment"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label" v-bind:class = "{'error' : classTorF.classInfoT}">
+										场所简介
+									</div>
+									<div class="item-input">
+										<textarea style="color: #999999" v-model = "values.classInfo"> </textarea>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="align-top" style="display: none">
+							<div class="item-content">
+								<div class="item-media">
+									<i class="icon icon-form-comment"></i>
+								</div>
+								<div class="item-inner">
+									<div class="item-title label">
+										健身房附件
+									</div>
+									<div class="item-input">
+										<img style="width: 70%;height:150px;margin-top: 20px;margin-left: 5%" src="./add.png"></img>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="content-block">
+					<div class="row">
+						<div class="col-50">
+							<a href="#" class="button button-big button-fill button-danger">取消</a>
+						</div>
+						<div class="col-50">
+							<a href="#" class="button button-big button-fill button-success" v-on:click = "submlitClass">提交</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../script/Zepto.min.js"></script>
+	<script src="../../../script/vue.js"></script>
+	<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+	<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=CYVBZ-3LILS-G4EOK-6MG4X-D2ZO2-ROFIC"></script>
+	<script type='text/javascript' src='../js/sm.min.js'></script>
+	<script type="text/javascript" src="../js/sm-city-picker.min.js"></script>
+	<script type="text/javascript">
+		var vueSub = new Vue({
+			el : '#app',
+			data : {
+				sumbiltUrl : 'http://10.1.180.242/appIos/saveGYM.do',
+				isLoading : false,
+				geolocation : '',   //  定位对象
+				geocoder : '',   //  反编译地址对象
+				values : {
+					className : '', // 健身房名称
+					city : '', // 所在省市区
+					classAddress : '', // 健身房详细地址
+					classCoach : '', // 健身房详细坐标
+					classUserName : '', // 健身房所有者姓名
+					classUserMobile : '', //  健身房所有者联系方式
+					classInfo : '' ,   // 健身房简介
+					classAddressInfo : '',
+				},
+				classTorF :{
+				    classNameT : false, // 健身房名称
+					cityT : false, // 所在省市区
+					classAddressT : false, // 健身房详细地址
+					classCoachT : false, // 健身房详细坐标
+//					classUserNameT : false, // 健身房所有者姓名
+//					classUserMobileT : false, //  健身房所有者联系方式
+					classInfoT : false ,   // 健身房简介
+				}
+			},
+		    watch:{
+               'values.classAddress': function (val) {
+                   vueSub.values.classCoach = '';
+                },
+                deep:true
+           },
+			methods : {
+				init : function() {
+				  var that = this;
+				  $("#city-picker").cityPicker({
+                  toolbarTemplate: '<header class="bar bar-nav">\
+                  <button class="button button-link pull-right close-picker" onclick="changeCity()">确定</button>\
+                  <h1 class="title">选择收货地址</h1>\
+                  </header>'
+                  });
+                  
+                  var geocoder = new qq.maps.Geocoder({
+                       complete : function(result){
+                       that.values.classCoach = result.detail.location;
+                       that.isLoading = false;
+                 }
+               });
+                 geocoder.setError(function() {
+				   alert("出错了，请输入正确的地址！！！");
+				   that.classTorF.classCoachT = true;
+				   that.isLoading = false;
+			     });
+               
+                  that.geocoder = geocoder;
+				},
+				getLatLng : function(){    //   根据填写的省市区获取对应的经纬度
+				   var that = this,geocoder = that.geocoder;
+				   var addres = that.values.city + that.values.classAddress;
+				   var address = that.trim(addres,'g');	 
+				   that.classAddressInfo = address;  
+				   that.isLoading = true;
+				   geocoder.getLocation(address);   
+				},
+				trim : function(_str,_g){
+				   var result,str = _str,is_global = _g;
+                   result = str.replace(/(^\s+)|(\s+$)/g,"");
+                   if(is_global.toLowerCase()=="g")
+                   {
+                    result = result.replace(/\s/g,"");
+                   }
+                    return result;
+				},
+				getLocationBtn : function() {// 定位当前位置
+					var that = this;
+					that.isLoading = true;
+					var geolocation = that.geolocation;
+					geolocation.getLocation(that.showPosition, that.showErr);
+				},
+				showPosition : function(_position) {// 定位成功
+					var infomation = JSON.stringify(position, null, 4),position=_position,that = this;
+					if (position.city == '') {//  如果省为空，需要按照定位到的经纬度转成省市区
+						that.getAddressFromCoor(new qq.maps.LatLng(position.lat, position.lng));
+					} else {
+						var provice = position.provice,city = position.city,district = position.district,addr = position.addr;
+						that.values.city = provice.replace('省','')+' '+city.replace('市','')+' '+district;
+					    that.isLoading = false;
+					}
+					
+				},
+				showErr : function() {
+					var that = this;
+					that.isLoading = false;
+					that.values.city = '北京  东城区';
+				},
+				/*
+				 *    根据经纬度获取城市
+				 */
+				getAddressFromCoor : function(_coor) {
+					var that = this, coor = _coor, geocoder = that.geocoder;
+					//对指定经纬度进行解析
+					geocoder.getAddress(coor);
+					//设置服务请求成功的回调函数
+					geocoder.setComplete(function(result) {
+						var city = result.detail.addressComponents.city,provice = result.detail.addressComponents.provice,district = result.detail.addressComponents.district;
+						that.values.city = provice.replace('省','')+' '+city.replace('市','')+' '+district;
+					    that.isLoading = false;
+					});
+					//若服务请求失败，则运行以下函数
+					geocoder.setError(function() {
+					    that.isLoading = false;
+						alert("出错了，请输入正确的经纬度！！！");
+					});
+				},
+				//  TODO 接口需要更改，经营者姓名跟联系方式去掉
+				submlitClass : function() {//   提交数据				   
+				   var that = this,data = that.values;
+				   that.classTorF = {
+				    classNameT : false, // 健身房名称
+					cityT : false, // 所在省市区
+					classAddressT : false, // 健身房详细地址
+					classCoachT : false, // 健身房详细坐标
+//					classUserNameT : false, // 健身房所有者姓名
+//					classUserMobileT : false, //  健身房所有者联系方式
+					classInfoT : false ,   // 健身房简介
+				};
+				if(data.className == ''){
+				    that.classTorF.classNameT = true;
+				    return;
+				}
+				if(data.city == ''){
+				    that.classTorF.cityT = true;
+				    return;
+				}
+				if(data.classAddress == ''){
+				    that.classTorF.classAddressT = true;
+				    return;
+				}
+				if(data.classCoach == ''){
+				    that.classTorF.classCoachT = true;
+				    return;
+				}
+//				if(data.classUserName == ''){
+//				    that.classTorF.classUserNameT = true;
+//				    return;
+//				}
+//				if(data.classUserMobile == ''){
+//				    that.classTorF.classUserMobileT = true;
+//				    return;
+//				}
+                that.isLoading = true;
+				var url = that.sumbiltUrl;
+				    $.ajax({
+					url : url,
+					type : 'POST',
+					data : {
+						"GYM_NAME" : data.className, //健身房名称
+						"ADDRESS" : data.classAddressInfo , //地址
+						"OPERATOR" : data.classUserName, //经营者
+						"MOBILE" : data.classUserMobile, // 联系方式
+						"MAP" : data.classCoach, //坐标
+						"SYNOPSIS" : data.classInfo,//简介
+						"QD" : '场所'
+					},
+					success : function(ret) {
+					    that.isLoading = false;
+						alert('提交成功，进行下一步操作');
+					},
+					error : function(err) {
+					    that.isLoading = false;
+						alert(JSON.stringify(err));
+					}
+				});
+				},
+			},
+			mounted : function() {
+				var that = this;
+				var geolocation = new qq.maps.Geolocation("CYVBZ-3LILS-G4EOK-6MG4X-D2ZO2-ROFIC", "wowo");
+				that.geolocation = geolocation;
+				that.init();
+				that.getLocationBtn();
+			}
+		});
+		function changeCity(){ 
+		    vueSub.values.city = document.getElementById('city-picker').value;
+		    vueSub.values.classAddress = '';
+		    vueSub.values.classCoach = '';
+		}
+	</script>
+</html>
